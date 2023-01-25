@@ -114,7 +114,7 @@ date_default_timezone_set('America/Mazatlan');
                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
               </div>
             </div>
-            <!-- Message End PRUEBA CAMBIO-->
+            <!-- Message End -->
           </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
@@ -256,6 +256,12 @@ date_default_timezone_set('America/Mazatlan');
                 <a href="../tables/data10.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Correos por Agente</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../tables/data11.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Despliegues</p>
                 </a>
               </li>
             </ul>

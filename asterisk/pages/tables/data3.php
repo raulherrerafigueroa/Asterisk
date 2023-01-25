@@ -261,6 +261,12 @@ date_default_timezone_set('America/Mazatlan');
                   <p>Correos por Agente</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="../tables/data11.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Despliegues</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">

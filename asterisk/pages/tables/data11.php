@@ -4,6 +4,10 @@ include ("conexion.php");
 
 $con = conectar();
 
+include ("conexionitop.php");
+
+$conitop = conectaritop();
+
 date_default_timezone_set('America/Mazatlan');
 
 ?>
@@ -15,7 +19,7 @@ date_default_timezone_set('America/Mazatlan');
   <meta http-equiv="refresh" content="60" >
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Llamadas por Hora</title>
+  <title>Despliegues</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -173,17 +177,6 @@ date_default_timezone_set('America/Mazatlan');
     <div class="sidebar">
       
 
-      <!-- SidebarSearch Form 
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>-->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -205,7 +198,7 @@ date_default_timezone_set('America/Mazatlan');
                   <p>Llamadas</p>
                 </a>
               </li>
-              <li class="nav-item">
+               <li class="nav-item">
                 <a href="../tables/data2.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Itop</p>
@@ -306,41 +299,30 @@ date_default_timezone_set('America/Mazatlan');
             </ul>
           </li>
           <li class="nav-item">
-            <!--<a href="#" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Pages
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a> -->
+            
             <ul class="nav nav-treeview">
-              <!--
-              <li class="nav-item">
-                <a href="../examples/invoice.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Invoice</p>
-                </a>
-              </li>-->
-             
-             
               
             </ul>
           </li>
           
+         
+           
           <li class="nav-item">
-            <!-- <a href="#" class="nav-link">
-              <i class="fas fa-circle nav-icon"></i>
-              <p>Level 1</p>
-            </a> -->
+           
+            <ul class="nav nav-treeview">
+              
+                </ul>
+              
+            </ul>
           </li>
-          <!-- <li class="nav-header">LABELS</li>
+          <li class="nav-item">
+          </li>
           
-        -->
         </ul>
       </nav>
-      <!-- /.sidebar-menu -->
+      
     </div>
-    <!-- /.sidebar -->
+    
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
@@ -350,30 +332,11 @@ date_default_timezone_set('America/Mazatlan');
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Llamadas por Agente / Hora</h1>
+            <h1>Despliegues </h1>
           </div>
 
-<?php
-
-         $fechasqlini = getdate();
-        $fechasqlini1 = "$fechasqlini[year]-$fechasqlini[mon]-$fechasqlini[mday]";
-
-         $fechasqlfin = getdate();
-         $fechasqlfin2 = "$fechasqlfin[year]-$fechasqlfin[mon]-$fechasqlfin[mday]";
-
-         
-         
-
-         if (!empty($_GET['fechadataini'])) {
-
-          $fechasqlini1 = $_GET['fechadataini'];
-          $fechasqlfin2 = $_GET['fechadatafin'];
-           }
-
-
-    ?>
             <div class="col-sm-6">
-           
+            
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -389,184 +352,109 @@ date_default_timezone_set('America/Mazatlan');
 
             </div>
             <!-- /.card -->
+            <?php
 
+
+                $fechasqliniww = getdate();
+                $fechasqlini1 = "$fechasqliniww[year]-$fechasqliniww[mon]-$fechasqliniww[mday]";
+
+                $fechasqlfinww = getdate();
+                $fechasqlfin2 = "$fechasqlfinww[year]-$fechasqlfinww[mon]-$fechasqlfinww[mday]";
+
+ 
+
+                if(!empty($_GET['fechadata2ini'])){
+                 $fechasqlini1 = $_GET['fechadata2ini'];
+                  $fechasqlfin2 = $_GET['fechadata2fin'];
+                  }
+                 ?>
             <div class="card">
               
               <!-- /.card-header -->
               <div class="card-body">
                 <form align="right" action ="" method="margin-top">
-                  <input type="date" id="fechadataini" name="fechadataini" min="2021-02-01" max="2025-12-31"></input> 
-                  <input type="date" id="fechadatafin" name="fechadatafin" ></input>
-                  <button type="submit"  id="btnbuscar" onclick="funcionbusquedadata()">Buscar</button>
-                  <h3  align="left"  id="fechadatafin" name="fechadatafin" >Fecha:  <?php echo($fechasqlini1) ?>  al <?php echo($fechasqlfin2) ?> </h3>
-                  
-
-
-                  <?php $sql="SELECT
-                  CASE
-                          WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-                          WHEN dstchannel LIKE '%8-668-00-413%' THEN 'P.GRAJEDA'
-                          WHEN dstchannel LIKE '%8-668-00-414%' THEN 'I.MONTOYA'
-                          WHEN dstchannel LIKE '%8-668-00-471%' THEN 'O.GALAVIZ'
-                          WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JL.LARA'
-                          WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JA.TORRES'
-                          WHEN dstchannel LIKE '%8-668-00-474%' THEN 'O.ECHAVE'
-                          WHEN dstchannel LIKE '%8-668-00-475%' THEN 'J.DAVALOS'
-                          WHEN dstchannel LIKE '%8-668-00-476%' THEN 'M.MORALES'
-                          WHEN dstchannel LIKE '%8-668-00-477%' THEN 'JL.LUNA'
-                          WHEN dstchannel LIKE '%8-668-00-478%' THEN 'C.APODACA'
-                          WHEN dstchannel LIKE '%8-668-00-479%' THEN 'G.PADILLA'
-                          WHEN dstchannel LIKE '%8-668-00-480%' THEN 'R.HERRERA'     
-                          WHEN dstchannel LIKE '%8-668-00-481%' THEN 'E.OSUNA'
-                          WHEN dstchannel LIKE '%8-668-00-482%' THEN 'A.ZAMORA'          
-                          WHEN dstchannel LIKE '%8-668-00-483%' THEN 'H.GALAVIZ'  
-                          WHEN dstchannel LIKE '%8-668-00-484%' THEN 'B.ROSAS'
-                          WHEN dstchannel LIKE '%8-668-00-442%' THEN 'N.NIEBLAS'
-                          WHEN dstchannel LIKE '%8-668-00-443%' THEN 'O.BELTRAN'
-                          WHEN dstchannel LIKE '%8-668-00-444%' THEN 'A.MARTINEZ'
-                          WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JA.CHAVARIN'
-                          WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-                          WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-                          WHEN dstchannel LIKE '%8-668-00-485%' THEN 'J.COTA'
-                          WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-                          WHEN lastapp = 'Playback' THEN 'IVR'
-                       ELSE
-                          'NO_IDENTIFICADO'
-                       END AGENTE,
-HOUR(CALLDATE) HORA,
-COUNT(calldate) No_Llamadas
-FROM (
-SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-       clid, src, dcontext, dst, channel, null 'dstchannel',
-       lastapp, lastdata,
-       (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
-       (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
-       disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-  FROM cdr cdr1
- WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-       AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-       AND dst IN ('866800411', '866800413', '866800414')
-       AND disposition = 'BUSY'
-       AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411', '866800413', '866800414') AND disposition IN ('ANSWERED','NO ANSWER','FAILED'))
-UNION
-SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-       clid, src, dcontext, dst, channel, null 'dstchannel',
-       lastapp, lastdata,
-       (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
-       (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
-       disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-  FROM cdr cdr1
- WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-   AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-   AND dst IN ('866800411', '866800413', '866800414')
-   AND disposition = 'NO ANSWER'
-   AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411', '866800413', '866800414') AND disposition IN ('ANSWERED','BUSY','FAILED'))
-UNION
-SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-       clid, src, dcontext, dst, channel, null 'dstchannel',
-       lastapp, lastdata,
-       (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
-       (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
-       disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-  FROM cdr cdr1
- WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-   AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-   AND dst IN ('866800411', '866800413', '866800414')
-   AND disposition = 'FAILED'
-   AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411', '866800413', '866800414') AND disposition IN ('ANSWERED','NO ANSWER','BUSY'))
-UNION
-SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-       clid, src, dcontext, dst, CHANNEL,
-       CASE 
-       WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
-       WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
-       ELSE dstchannel
-       END 'dstchannel',
-       lastapp, lastdata,
-       (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
-       (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
-       disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-  FROM cdr cdr1
- WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-   AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-   AND dst IN ('866800411','DIAL411', '866800413', '866800414')
-   AND cdr1.billsec>4
-   ) DATA
-   WHERE  disposition = 'ANSWERED'
-   AND billsec>4
-GROUP BY  CASE
-                          WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-                          WHEN dstchannel LIKE '%8-668-00-413%' THEN 'P.GRAJEDA'
-                          WHEN dstchannel LIKE '%8-668-00-414%' THEN 'I.MONTOYA'
-                          WHEN dstchannel LIKE '%8-668-00-471%' THEN 'O.GALAVIZ'
-                          WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JL.LARA'
-                          WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JA.TORRES'
-                          WHEN dstchannel LIKE '%8-668-00-474%' THEN 'O.ECHAVE'
-                          WHEN dstchannel LIKE '%8-668-00-475%' THEN 'J.DAVALOS'
-                          WHEN dstchannel LIKE '%8-668-00-476%' THEN 'M.MORALES'
-                          WHEN dstchannel LIKE '%8-668-00-477%' THEN 'JL.LUNA'
-                          WHEN dstchannel LIKE '%8-668-00-478%' THEN 'C.APODACA'
-                          WHEN dstchannel LIKE '%8-668-00-479%' THEN 'G.PADILLA'
-                          WHEN dstchannel LIKE '%8-668-00-480%' THEN 'R.HERRERA'     
-                          WHEN dstchannel LIKE '%8-668-00-481%' THEN 'E.OSUNA'
-                          WHEN dstchannel LIKE '%8-668-00-482%' THEN 'A.ZAMORA'          
-                          WHEN dstchannel LIKE '%8-668-00-483%' THEN 'H.GALAVIZ'  
-                          WHEN dstchannel LIKE '%8-668-00-484%' THEN 'B.ROSAS'
-                          WHEN dstchannel LIKE '%8-668-00-442%' THEN 'N.NIEBLAS'
-                          WHEN dstchannel LIKE '%8-668-00-443%' THEN 'O.BELTRAN'
-                          WHEN dstchannel LIKE '%8-668-00-444%' THEN 'A.MARTINEZ'
-                          WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JA.CHAVARIN'
-                          WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-                          WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-                          WHEN dstchannel LIKE '%8-668-00-485%' THEN 'J.COTA'
-                          WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-                          WHEN lastapp = 'Playback' THEN 'IVR'
-                       ELSE
-                          'NO_IDENTIFICADO'
-                       END, HORA
-                       ORDER BY HORA DESC, No_Llamadas DESC"; 
-                        
-                        $resul=mysqli_query($con,$sql);
-                        
-                        ?>
-
-
+                  <input type="date" id="fechadata2ini" name="fechadata2ini" min="2015-11-21" max="2025-12-31"></input> 
+                  <input type="date" id="fechadata2fin" name="fechadata2fin" ></input>
+                  <button type="submit"  id="btnbuscar" onclick="funcionbusquedadata2()">Buscar</button>
+                  <h3  align="left"  >Fecha:  <?php echo($fechasqlini1) ?>  al <?php echo($fechasqlfin2) ?> </h3>
+                 
                 </form>
+               <!-- SE QUITA ID DE EX<table id="example1" */class="table table-bordered table-striped"> -->
                 <table class="table table-bordered table-striped">
                   <thead>
-                
-                    <tr>
-                    <th>Agente</th>
-                    <th>Hora</th>
-                    <th>No_Llamadas</th>
-                    </tr>
-               
+                  <tr>
+                    <th>Responsable</th>
+                    <th>Despliegue</th>
+                    <th>Aplicativo</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                  </tr>
                   </thead>
                   <tbody>
-                  <script>
+
+                    <script>
                    
-                    function funcionbusquedadata(){
+                    function funcionbusquedadata2(){
      
-                     var G1 =  document.getElementById("fechadataini").value;
-                     var G2 =  document.getElementById("fechadatafin").value;
+                     var G1 =  document.getElementById("fechadata2ini").value;
+                     var G2 =  document.getElementById("fechadata2fin").value;
                     }
                   </script>
-              
-     
 
+               
           <?php
 
+      $sqlitop3="SELECT 
+      CASE
+      WHEN  agent_id = '2' THEN 'P.GRAJEDA'
+            WHEN agent_id = '1600' THEN 'I.MONTOYA'
+            WHEN agent_id = '5324' THEN 'H.GALAVIZ'
+            WHEN agent_id = '12' THEN 'JL.LARA'
+            WHEN agent_id = '825' THEN 'JA.TORRES'
+            WHEN agent_id = '2954' THEN 'O.ECHAVE'
+            WHEN agent_id = '8351' THEN 'J.DAVALOS'
+            WHEN agent_id = '4771' THEN 'M.MORALES'
+            WHEN agent_id = '3102' THEN 'JL.LUNA'
+            WHEN agent_id = '3264' THEN 'C.APODACA'
+            WHEN agent_id = '1794' THEN 'G.PADILLA'
+            WHEN agent_id = '4503' THEN 'R.HERRERA'     
+            WHEN agent_id = '5490' THEN 'E.OSUNA'
+            WHEN agent_id = '2952' THEN 'A.ZAMORA'          
+            WHEN agent_id = '11' THEN 'O.GALAVIZ'  
+            WHEN agent_id = '6022' THEN 'B.ROSAS'
+            WHEN agent_id = '8924' THEN 'N.NIEBLAS'
+            WHEN agent_id = '8918' THEN 'O.BELTRAN'
+            WHEN agent_id = '8763' THEN 'A.MARTINEZ'
+            WHEN agent_id = '8897' THEN 'JA.CHAVARIN'
+            WHEN agent_id = '9713' THEN 'J.COTA'
+            END agent_id, title,service.name, ticket_request.solution ,ticket.start_date
+            FROM ticket 
+            INNER JOIN ticket_request ON ticket.id = ticket_request.id
+            INNER JOIN servicesubcategory  ON ticket_request.servicesubcategory_id = servicesubcategory.id
+            INNER JOIN service ON ticket_request.service_id = service.id
+            WHERE start_date BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+            AND team_id IN ('4')
+            AND servicesubcategory.name = 'Actualizaciones'
+            ORDER BY start_Date DESC  ";
 
+  
+$resul=mysqli_query($conitop,$sqlitop3);
 
-while ($mostrar =mysqli_fetch_array($resul)){ ?>
+$SUMA = 0;
+while ($mostrar =mysqli_fetch_array($resul)){?>
  <tr>
  <td> <?php echo $mostrar[0]?></td>
- <td> <?php echo $mostrar[1]?>  Hrs.</td>
+ <td> <?php echo $mostrar[1]?></td>
  <td> <?php echo $mostrar[2]?></td>
- 
+ <td> <?php echo $mostrar[3]?></td>
+ <td> <?php echo $mostrar[4]?></td>
+ <?php $SUMA = $SUMA + 1;?>
                 <?php } ?>    
                   </tr>
-                  
+                  <tr>
+                  <td> <b>Total:</b></td>
+                  <td > <b> <?php echo $SUMA?> </b></td>
+                  </tr>
                   </tbody>
 
                 </table>
@@ -588,7 +476,7 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
 <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-         
+          
 
          
           <div class="col-sm-6">
@@ -607,14 +495,7 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
             <div class="card">
               
 
-            </div>
-            <!-- /.card -->
-
-            <div class="card">
-              
-              <!-- /.card-header -->
-              
-              <!-- /.card-body -->
+           
             </div>
             <!-- /.card -->
           </div>
@@ -641,6 +522,7 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->
+
   <footer class="main-footer">
     <strong></a></strong>
     By: Raul Herrera / Abner Zamora
