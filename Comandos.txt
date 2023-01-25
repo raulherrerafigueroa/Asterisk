@@ -1,4 +1,6 @@
-git statussasd-Ver en Donde estamos 
+Comandos de Git
+
+-Ver en Donde estamos 
 pwd
 
 -Ver lo pendiente de Subir
