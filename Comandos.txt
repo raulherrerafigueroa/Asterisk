@@ -1,5 +1,8 @@
 Comandos de Git
 
+*NOTA, PARA AGREGAR AL REPOSITORIO, NECESITA ESTAR EN ESTA CARPETA GIT*
+**
+
 -Ver en Donde estamos 
 pwd
 
@@ -15,3 +18,5 @@ git commit -m "Descripcion de Ajuste"
 -Regresar de stage
 git restore --staged archivo.txt
 
+-Si no se manda, hacer un commit con push
+git push
