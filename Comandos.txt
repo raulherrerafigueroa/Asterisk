@@ -1,4 +1,4 @@
--Ver en Donde estamos 
+git statussasd-Ver en Donde estamos 
 pwd
 
 -Ver lo pendiente de Subir
@@ -12,3 +12,4 @@ git commit -m "Descripcion de Ajuste"
 -Regresar de stage
 git restore --staged archivo.txt
 
+test
