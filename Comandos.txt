@@ -1,0 +1,14 @@
+-Ver en Donde estamos 
+pwd
+
+-Ver lo pendiente de Subir
+git status
+
+-Agregar a Storage
+git add
+
+git commit -m "Descripcion de Ajuste"
+
+-Regresar de stage
+git restore --staged archivo.txt
+
