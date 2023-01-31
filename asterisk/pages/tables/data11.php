@@ -434,7 +434,7 @@ date_default_timezone_set('America/Mazatlan');
             INNER JOIN service ON ticket_request.service_id = service.id
             WHERE start_date BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
             AND team_id IN ('4')
-            AND servicesubcategory.name = 'Actualizaciones'
+            AND servicesubcategory.name IN ('Actualizaciones','Actualización')
             ORDER BY start_Date DESC  ";
 
   
