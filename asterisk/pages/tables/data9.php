@@ -434,6 +434,7 @@ date_default_timezone_set('America/Mazatlan');
             INNER JOIN service ON ticket_request.service_id = service.id
             WHERE start_date BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
             AND team_id IN ('4')
+            AND ticket.org_id = '19'
             AND servicesubcategory.name = 'Pruebas'
             group BY /* service.name, servicesubcategory.name, */
           CASE
