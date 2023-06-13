@@ -423,6 +423,8 @@ date_default_timezone_set('America/Mazatlan');
             WHEN agent_id = '11' THEN 'O.GALAVIZ'  
             WHEN agent_id = '6022' THEN 'B.ROSAS'
             WHEN agent_id = '8924' THEN 'N.NIEBLAS'
+            WHEN agent_id = '13426' THEN 'M.GALAVIZ'
+            WHEN agent_id = '13419' THEN 'A.GRIJALVA'
             WHEN agent_id = '8918' THEN 'O.BELTRAN'
             WHEN agent_id = '8763' THEN 'A.MARTINEZ'
             WHEN agent_id = '8897' THEN 'JA.CHAVARIN'

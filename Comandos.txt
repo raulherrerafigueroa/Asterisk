@@ -1,6 +1,7 @@
 Comandos de Git
 
 *NOTA, PARA AGREGAR AL REPOSITORIO, NECESITA ESTAR EN ESTA CARPETA GIT*
+cd users/rherrera/Documetns/paquetexpress/git
 **
 
 -Ver en Donde estamos 
@@ -20,3 +21,8 @@ git restore --staged archivo.txt
 
 -Si no se manda, hacer un commit con push
 git push
+
+
+git diff
+
+git diff --staged
