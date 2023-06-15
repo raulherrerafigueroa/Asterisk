@@ -11,7 +11,7 @@ pwd
 git status
 
 -Agregar a Storage, antes de commit
-git add
+git add *
 
 -Guardado de los ajsutes
 git commit -m "Descripcion de Ajuste"

@@ -409,6 +409,7 @@ date_default_timezone_set('America/Mazatlan');
                                 AND duration > '0'
                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI','EC500')
                                 AND dst IN ('866800411', '866800413', '866800414')
+                                AND billsec > 9
                                 GROUP BY calldate
                                 HAVING COUNT(calldate) IN ('17','2')
                                 ORDER BY calldate DESC
