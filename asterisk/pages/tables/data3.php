@@ -484,7 +484,7 @@ date_default_timezone_set('America/Mazatlan');
       WHEN dstchannel LIKE '%8-668-00-482%' THEN 'A.ZAMORA'          
       WHEN dstchannel LIKE '%8-668-00-483%' THEN 'H.GALAVIZ'  
       WHEN dstchannel LIKE '%8-668-00-484%' THEN 'B.ROSAS'
-      WHEN dstchannel LIKE '%8-668-00-477%' THEN 'M.GALAVIZ'
+      WHEN dstchannel LIKE '%8-668-00-180%' THEN 'M.GALAVIZ'
       WHEN dstchannel LIKE '%8-668-00-443%' THEN 'O.BELTRAN'
       WHEN dstchannel LIKE '%8-668-00-444%' THEN 'A.MARTINEZ'
       WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JA.CHAVARIN'
