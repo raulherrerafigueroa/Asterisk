@@ -571,7 +571,232 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
                   <button type="submit"  id="btnbuscar" onclick="funcionbusquedadata()">Buscar</button>
                   <h3  align="left"  id="fechadatafin" name="fechadatafin" >Fecha:  <?php echo($fechasqlini1) ?>  al <?php echo($fechasqlfin2) ?> </h3>
                   
+                  
+                  <table class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                  <th>Demanda</th>
+                    <th>Atendidas</th>
+                    <th>Perdidas</th>
+                    <th>Eficiencia</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <script>
+                   
+                    function funcionbusquedadata(){
+     
+                     var G1 =  document.getElementById("fechadataini").value;
+                     var G2 =  document.getElementById("fechadatafin").value;
+                    }
+                  </script>
+              
+     
+
+          <?php
+
+          
+                        $sqleficiencia="  SELECT calldate fecha, sum(dem) Demanda,sum(con) Contestadas,sum(per) Perdidas, concat(ROUND((SUM(con)/SUM(dem)*100),2),'%') Eficiencia FROM (
+                          SELECT calldate, dem,con,per,etiqueta
+                            FROM (
+                             SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, COUNT(disposition) dem, 0 con, 0 per,'DEMANDA' etiqueta
+                             
+                               FROM (
+                              SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                     AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                     AND dst IN ('866800411')
+                                     AND disposition = 'BUSY'
+                                     AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411','866800445') AND disposition IN ('ANSWERED','NO ANSWER','FAILED'))
+                          UNION
+                              SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'NO ANSWER'
+                                 AND cdr1.billsec > 9
+                                 AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') /*AND dst IN ('866800411','866800445','866800448','866800421','866800423','866800482')*/ AND disposition IN ('ANSWERED','FAILED'))
+                          UNION
+                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'FAILED'
+                                 AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY'))
+                          UNION
+                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel,
+                                     CASE 
+                                     WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
+                                     WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
+                                     ELSE dstchannel
+                                     END 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                     (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'ANSWERED'
+                                 AND (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') >4
+                          ) DATA
+                          
+                          
+                          UNION ALL
+                          
+                          
+                          SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, 0 dem, COUNT(disposition) con, 0 per,'CONTESTADAS' etiqueta
+                             
+                               FROM (
+                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel,
+                                     CASE 
+                                     WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
+                                     WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
+                                     ELSE dstchannel
+                                     END 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                     (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'ANSWERED'
+                                 AND (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') >4
+                          UNION
+                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
+                                     'FAILED', amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'ANSWERED'
+                                 AND billsec = 0
+                                 AND lastapp != 'Playback'
+                                 AND clid NOT LIKE '%SERVICIOS TI%'
+                                 AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY') AND billsec > '0')
+                          
+                          ) DATA
+                          
+                          
+                          UNION ALL
+                          
+                          
+                          SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, 0 dem, 0 con, COUNT(disposition) per,'PERDIDAS' etiqueta
+                             
+                               FROM (
+                              SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                     AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                     AND dst IN ('866800411')
+                                     AND disposition = 'BUSY'
+                                     AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411','866800445') AND disposition IN ('ANSWERED','NO ANSWER','FAILED'))
+                          UNION
+                              SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'NO ANSWER'
+                                 AND cdr1.billsec > 9
+                                 AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') /*AND dst IN ('866800411','866800445','866800448','866800421','866800423','866800482')*/ AND disposition IN ('ANSWERED','FAILED'))
+                          UNION
+                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'FAILED'
+                                 AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY'))
+                          UNION
+                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel, null 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
+                                     (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
+                                     'FAILED', amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'ANSWERED'
+                                 AND billsec = 0
+                                 AND lastapp != 'Playback'
+                                 AND clid NOT LIKE '%SERVICIOS TI%'
+                                 AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY') AND billsec > '0')
+                          
+                          ) DATA
+                          )CONSULTA
+                           GROUP BY calldate,etiqueta
+                           )CONSIULTA2";
+
+
+
+$resul=mysqli_query($con,$sqleficiencia);
+
+$SUMA = 0;
+while ($mostrar =mysqli_fetch_array($resul)){ ?>
+ <tr>
+ <td> <?php echo $mostrar[1]?></td>
+ <td> <?php echo $mostrar[2]?></td>
+ <td> <?php echo $mostrar[3]?></td>
+ <td> <?php echo $mostrar[4]?></td>
+ 
+                <?php } ?>    
+                  </tr>
+                  <tr>
+                  </tr>
+                  </tbody>
+
+                </table>
+                  
                 </form>
+
+                
+
+
                 <table class="table table-bordered table-striped">
                   <thead>
                   <tr>
