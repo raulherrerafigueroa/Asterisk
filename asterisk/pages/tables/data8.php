@@ -402,18 +402,40 @@ date_default_timezone_set('America/Mazatlan');
                   
 
 
-                  <?php $sql="SELECT calldate, clid, duration, disposition, COUNT(calldate)
-                                FROM cdr 
-                                WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-                                AND disposition = 'NO ANSWER'
-                                AND duration > '0'
-                                AND dcontext IN ('INTERNAL', 'SERVICIOS-TI','EC500')
-                                AND dst IN ('866800411', '866800413', '866800414')
-                                AND billsec > 9
-                                GROUP BY calldate
-                                HAVING COUNT(calldate) IN ('17','2')
+                  <?php $sql=  "SELECT
+   calldate, clid, billsec, disposition
+   FROM (
+    SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+           clid, src, dcontext, dst, channel, null 'dstchannel',
+           lastapp, lastdata,
+           (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+           (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+           disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+      FROM cdr cdr1
+      WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+       AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+       AND dst IN ('866800411')
+       AND disposition = 'NO ANSWER'
+       AND cdr1.billsec > 9
+       AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') /*AND dst IN ('866800411','866800445','866800448','866800421','866800423','866800482')*/ AND disposition IN ('ANSWERED','FAILED'))
+UNION
+SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+           clid, src, dcontext, dst, channel, null 'dstchannel',
+           lastapp, lastdata,
+           (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+           (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+           disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+      FROM cdr cdr1
+      WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+       AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+       AND dst IN ('866800411')
+       AND disposition = 'FAILED'
+       AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY'))
+       
+) DATA
                                 ORDER BY calldate DESC
-                                "; 
+      
+"; 
                         
                         $resul=mysqli_query($con,$sql);
                         
