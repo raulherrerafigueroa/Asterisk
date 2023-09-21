@@ -846,8 +846,9 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
                            WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
                            WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
                            WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
+                           WHEN lastapp = 'Playback' THEN 'IVR'
                         ELSE
-                           'NO_IDENTIFICADO' -- dstchannel
+                           'NO_IDENTIFICADO' 
                         END 'AGENTE',
                         count(distinct(uniqueid)) LLAMADAS
                         FROM (
