@@ -821,142 +821,57 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
           
                         $sql="SELECT
                         CASE
-                        WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-                          WHEN dstchannel LIKE '%8-668-00-413%' THEN 'P.GRAJEDA'
-                          WHEN dstchannel LIKE '%8-668-00-414%' THEN 'I.MONTOYA'
-                          WHEN dstchannel LIKE '%8-668-00-471%' THEN 'O.GALAVIZ'
-                          WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JL.LARA'
-                          WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JA.TORRES'
-                          WHEN dstchannel LIKE '%8-668-00-474%' THEN 'O.ECHAVE'
-                          WHEN dstchannel LIKE '%8-668-00-475%' THEN 'J.DAVALOS'
-                          WHEN dstchannel LIKE '%8-668-00-476%' THEN 'M.MORALES'
-                          WHEN dstchannel LIKE '%8-668-00-442%' THEN 'A.GRIJALVA'
-                          WHEN dstchannel LIKE '%8-668-00-478%' THEN 'C.APODACA'
-                          WHEN dstchannel LIKE '%8-668-00-479%' THEN 'G.PADILLA'
-                          WHEN dstchannel LIKE '%8-668-00-480%' THEN 'R.HERRERA'     
-                          WHEN dstchannel LIKE '%8-668-00-481%' THEN 'E.OSUNA'
-                          WHEN dstchannel LIKE '%8-668-00-482%' THEN 'A.ZAMORA'          
-                          WHEN dstchannel LIKE '%8-668-00-483%' THEN 'H.GALAVIZ'  
-                          WHEN dstchannel LIKE '%8-668-00-484%' THEN 'B.ROSAS'
-                          WHEN dstchannel LIKE '%8-668-00-180%' THEN 'M.GALAVIZ'
-                          WHEN dstchannel LIKE '%8-668-00-443%' THEN 'O.BELTRAN'
-                          WHEN dstchannel LIKE '%8-668-00-444%' THEN 'A.MARTINEZ'
-                          WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JA.CHAVARIN'
-                          WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-                          WHEN dstchannel LIKE '%8-668-00-485%' THEN 'J.COTA'
-                          WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-                          WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-                          WHEN lastapp = 'Playback' THEN 'IVR'
-                       ELSE
-                          'NO_IDENTIFICADO'
-                       END AGENTE, COUNT(CALLDATE) CONTAR
+                           WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
+                           WHEN dstchannel LIKE '%8-668-00-413%' THEN 'PGRAJEDA'
+                           WHEN dstchannel LIKE '%8-668-00-414%' THEN 'IMONTOYA'
+                           WHEN dstchannel LIKE '%8-668-00-471%' THEN 'OGALAVIZ'
+                           WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JLLARA'
+                           WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JATORRES'
+                           WHEN dstchannel LIKE '%8-668-00-474%' THEN 'OECHAVE'
+                           WHEN dstchannel LIKE '%8-668-00-475%' THEN 'JDAVALOS'
+                           WHEN dstchannel LIKE '%8-668-00-476%' THEN 'MMORALES'
+                           WHEN dstchannel LIKE '%8-668-00-180%' THEN 'MGALAVIZ'
+                           WHEN dstchannel LIKE '%8-668-00-478%' THEN 'CAPODACA'
+                           WHEN dstchannel LIKE '%8-668-00-479%' THEN 'GPADILLA'
+                           WHEN dstchannel LIKE '%8-668-00-480%' THEN 'RHERRERA'     
+                           WHEN dstchannel LIKE '%8-668-00-481%' THEN 'EOSUNA'
+                           WHEN dstchannel LIKE '%8-668-00-482%' THEN 'AZAMORA'          
+                           WHEN dstchannel LIKE '%8-668-00-483%' THEN 'HGALAVIZ'  
+                           WHEN dstchannel LIKE '%8-668-00-484%' THEN 'BROSAS' 
+                           WHEN dstchannel LIKE '%8-668-00-485%' THEN 'JCOTA'
+                           WHEN dstchannel LIKE '%8-668-00-442%' THEN 'AGRIJALVA'
+                           WHEN dstchannel LIKE '%8-668-00-443%' THEN 'OBELTRAN'
+                           WHEN dstchannel LIKE '%8-668-00-444%' THEN 'AMARTINEZ'
+                           WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JACHAVARIN'
+                           WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
+                           WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
+                           WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
+                        ELSE
+                           'NO_IDENTIFICADO' -- dstchannel
+                        END 'AGENTE',
+                        count(distinct(uniqueid)) LLAMADAS
                         FROM (
-    SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-           clid, src, dcontext, dst, channel, null 'dstchannel',
-           lastapp, lastdata,
-           (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
-           (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
-           disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-      FROM cdr cdr1
-     WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-           AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-           AND dst IN ('866800411')
-           AND disposition = 'BUSY'
-           AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411','866800445') AND disposition IN ('ANSWERED','NO ANSWER','FAILED'))
-UNION
-    SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-           clid, src, dcontext, dst, channel, null 'dstchannel',
-           lastapp, lastdata,
-           (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
-           (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
-           disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-      FROM cdr cdr1
-     WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-       AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-       AND dst IN ('866800411')
-       AND disposition = 'NO ANSWER'
-       AND cdr1.billsec > 9
-       AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') /*AND dst IN ('866800411','866800445','866800448','866800421','866800423','866800482')*/ AND disposition IN ('ANSWERED','FAILED'))
-UNION
-    SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-           clid, src, dcontext, dst, channel, null 'dstchannel',
-           lastapp, lastdata,
-           (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
-           (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
-           disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-      FROM cdr cdr1
-     WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-       AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-       AND dst IN ('866800411')
-       AND disposition = 'FAILED'
-       AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY'))
-UNION
-    SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-           clid, src, dcontext, dst, channel,
-           CASE 
-           WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
-           WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
-           ELSE dstchannel
-           END 'dstchannel',
-           lastapp, lastdata,
-           (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
-           (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
-           disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-      FROM cdr cdr1
-     WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-       AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-       AND dst IN ('866800411')
-       AND disposition = 'ANSWERED'
-       AND (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') >4
-UNION
-    SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-           clid, src, dcontext, dst, channel, null 'dstchannel',
-           lastapp, lastdata,
-           (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
-           (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
-           'FAILED', amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-      FROM cdr cdr1
-     WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-       AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-       AND dst IN ('866800411')
-       AND disposition = 'ANSWERED'
-       AND billsec = 0
-       AND lastapp != 'Playback'
-       AND clid NOT LIKE '%SERVICIOS TI%'
-       AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY') AND billsec > '0')
-
-) data
-GROUP BY CASE
-                          WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-                          WHEN dstchannel LIKE '%8-668-00-413%' THEN 'P.GRAJEDA'
-                          WHEN dstchannel LIKE '%8-668-00-414%' THEN 'I.MONTOYA'
-                          WHEN dstchannel LIKE '%8-668-00-471%' THEN 'O.GALAVIZ'
-                          WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JL.LARA'
-                          WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JA.TORRES'
-                          WHEN dstchannel LIKE '%8-668-00-474%' THEN 'O.ECHAVE'
-                          WHEN dstchannel LIKE '%8-668-00-475%' THEN 'J.DAVALOS'
-                          WHEN dstchannel LIKE '%8-668-00-476%' THEN 'M.MORALES'
-                          WHEN dstchannel LIKE '%8-668-00-442%' THEN 'A.GRIJALVA'
-                          WHEN dstchannel LIKE '%8-668-00-478%' THEN 'C.APODACA'
-                          WHEN dstchannel LIKE '%8-668-00-479%' THEN 'G.PADILLA'
-                          WHEN dstchannel LIKE '%8-668-00-480%' THEN 'R.HERRERA'     
-                          WHEN dstchannel LIKE '%8-668-00-481%' THEN 'E.OSUNA'
-                          WHEN dstchannel LIKE '%8-668-00-482%' THEN 'A.ZAMORA'          
-                          WHEN dstchannel LIKE '%8-668-00-483%' THEN 'H.GALAVIZ'  
-                          WHEN dstchannel LIKE '%8-668-00-484%' THEN 'B.ROSAS'
-                          WHEN dstchannel LIKE '%8-668-00-180%' THEN 'M.GALAVIZ'
-                          WHEN dstchannel LIKE '%8-668-00-443%' THEN 'O.BELTRAN'
-                          WHEN dstchannel LIKE '%8-668-00-444%' THEN 'A.MARTINEZ'
-                          WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JA.CHAVARIN'
-                          WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-                          WHEN dstchannel LIKE '%8-668-00-485%' THEN 'J.COTA'
-                          WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-                          WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-                          WHEN lastapp = 'Playback' THEN 'IVR'
-                       ELSE
-                          'NO_IDENTIFICADO'
-                       END
-                           ORDER BY CONTAR DESC";
+                         SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                clid, src, dcontext, dst, channel,
+                                CASE 
+                                WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
+                                WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
+                                ELSE dstchannel
+                                END 'dstchannel',
+                                lastapp, lastdata,
+                                (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                           FROM cdr cdr1
+                          WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                            AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                            AND dst IN ('866800411')
+                            AND disposition = 'ANSWERED'
+                            AND (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') >4
+                     ) DATA
+                      GROUP BY agente
+                     ORDER BY LLAMADAS DESC
+                        ";
 
 
 
