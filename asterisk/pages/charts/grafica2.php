@@ -515,6 +515,8 @@ WHEN  agent_id = '2' THEN 'P.GRAJEDA'
       WHEN agent_id = '8763' THEN 'A.MARTINEZ'
       WHEN agent_id = '8897' THEN 'JA.CHAVARIN'
       WHEN agent_id = '9713' THEN 'J.COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       END agent_id, count(agent_id) NumItop FROM ticket
   WHERE
   

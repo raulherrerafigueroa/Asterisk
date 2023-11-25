@@ -429,6 +429,8 @@ date_default_timezone_set('America/Mazatlan');
       WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
       WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
       WHEN agent_id = '9713' THEN 'JORGE COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       END agent_id, title,service.name, ticket_request.solution ,ticket.start_date
             FROM ticket 
             INNER JOIN ticket_request ON ticket.id = ticket_request.id

@@ -429,6 +429,8 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
       WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
       WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
       WHEN agent_id = '9713' THEN 'JORGE COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       END Agente, 
          count(agent_id) num_inc,
          0 num_req,
@@ -467,6 +469,8 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
       WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
       WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
       WHEN agent_id = '9713' THEN 'JORGE COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       END
                  
      UNION ALL
@@ -496,6 +500,8 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
       WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
       WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
       WHEN agent_id = '9713' THEN 'JORGE COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       END Agente, 
            0 Num_Correos,
          count(agent_id) num_req,
@@ -534,6 +540,8 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
       WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
       WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
       WHEN agent_id = '9713' THEN 'JORGE COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       END 
      ) as correos
      GROUP BY Agente

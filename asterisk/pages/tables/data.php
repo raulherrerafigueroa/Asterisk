@@ -596,7 +596,7 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
           <?php
 
           
-                        $sqleficiencia="  SELECT calldate fecha, sum(dem) Demanda,sum(con) Contestadas,sum(per) Perdidas, concat(ROUND((SUM(con)/SUM(dem)*100),2),'%') Eficiencia FROM (
+                        $sqleficiencia="SELECT calldate fecha, sum(dem) Demanda,sum(con) Contestadas,sum(per) Perdidas, concat(ROUND((SUM(con)/SUM(dem)*100),2),'%') Eficiencia FROM (
                           SELECT calldate, dem,con,per,etiqueta
                             FROM (
                              SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, COUNT(disposition) dem, 0 con, 0 per,'DEMANDA' etiqueta
@@ -793,10 +793,7 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
                 </table>
                   
                 </form>
-
                 
-
-
                 <table class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -849,7 +846,7 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
                            WHEN lastapp = 'Playback' THEN 'IVR'
                            WHEN dstchannel LIKE '%Celular%' THEN 'GUARDIA'
                            ELSE
-                           'TRANSFERIDA' -- dstchannel 
+                           'TRANSFERIDA' 
                         END 'AGENTE',
                         count(distinct(uniqueid)) LLAMADAS
                         FROM (
