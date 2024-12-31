@@ -6,6 +6,39 @@ $con = conectar();
 
 date_default_timezone_set('America/Mazatlan');
 
+$UsuariosLlamadas = "CASE
+         WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
+         WHEN dstchannel LIKE '%8-668-00-413%' THEN 'PERLA GRAJEDA'
+         WHEN dstchannel LIKE '%8-668-00-414%' THEN 'ISAMAR MONTOYA'
+         WHEN dstchannel LIKE '%8-668-00-471%' THEN 'OSCAR GALAVIZ'
+         WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JESUS LARA'
+         WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JOSE ANTONIO TORRES'
+         WHEN dstchannel LIKE '%8-668-00-474%' THEN 'ORSON ECHAVE'
+         WHEN dstchannel LIKE '%8-668-00-475%' THEN 'JORGE DAVALOS'
+         WHEN dstchannel LIKE '%8-668-00-476%' THEN 'MIGUEL MORALES'
+         WHEN dstchannel LIKE '%8-668-00-180%' THEN 'MARCIA GALAVIZ'
+         WHEN dstchannel LIKE '%8-668-00-478%' THEN 'CAIN APODACA'
+         WHEN dstchannel LIKE '%8-668-00-479%' THEN 'GUILLERMO PADILLA'
+         WHEN dstchannel LIKE '%8-668-00-480%' THEN 'RAUL HERRERA'     
+         WHEN dstchannel LIKE '%8-668-00-481%' THEN 'EMMANUEL OSUNA'
+         WHEN dstchannel LIKE '%8-668-00-482%' THEN 'ABNER ZAMORA'          
+         WHEN dstchannel LIKE '%8-668-00-483%' THEN 'HORACIO GALAVIZ'  
+         WHEN dstchannel LIKE '%8-668-00-484%' THEN 'BLAS ROSAS' 
+         WHEN dstchannel LIKE '%8-668-00-485%' THEN 'JORGE COTA'
+         WHEN dstchannel LIKE '%8-668-00-442%' THEN 'ANGEL GRIJALVA'
+         WHEN dstchannel LIKE '%8-668-00-443%' THEN 'OSCAR BELTRAN'
+         WHEN dstchannel LIKE '%8-668-00-444%' THEN 'ALBERTO MARTINEZ'
+         WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JOSE ANTONIO CHAVARIN'
+         WHEN dstchannel LIKE '%8-668-00-389%' THEN 'YOHARY PITTER'
+         WHEN dstchannel LIKE '%8-668-00-148%' THEN 'JOSE LUIS VALDEZ'
+         WHEN dstchannel LIKE '%8-668-00-387%' THEN 'ARMANDO BORBOA'
+         WHEN dstchannel LIKE '%8-668-00-385%' THEN 'HECTOR GALLARDO'
+         WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
+         WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
+         WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
+         WHEN lastapp = 'Playback' THEN 'IVR'
+         WHEN dstchannel LIKE '%Celular%' THEN 'GUARDIA'
+         ELSE";
 
 ?>
 
@@ -466,34 +499,7 @@ date_default_timezone_set('America/Mazatlan');
    dcontext,
    dst,
    channel,
-   CASE
-      WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-      WHEN dstchannel LIKE '%8-668-00-413%' THEN 'P.GRAJEDA'
-      WHEN dstchannel LIKE '%8-668-00-414%' THEN 'I.MONTOYA'
-      WHEN dstchannel LIKE '%8-668-00-471%' THEN 'O.GALAVIZ'
-      WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JL.LARA'
-      WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JA.TORRES'
-      WHEN dstchannel LIKE '%8-668-00-474%' THEN 'O.ECHAVE'
-      WHEN dstchannel LIKE '%8-668-00-475%' THEN 'J.DAVALOS'
-      WHEN dstchannel LIKE '%8-668-00-476%' THEN 'M.MORALES'
-      WHEN dstchannel LIKE '%8-668-00-442%' THEN 'A.GRIJALVA'
-      WHEN dstchannel LIKE '%8-668-00-478%' THEN 'C.APODACA'
-      WHEN dstchannel LIKE '%8-668-00-479%' THEN 'G.PADILLA'
-      WHEN dstchannel LIKE '%8-668-00-480%' THEN 'R.HERRERA'     
-      WHEN dstchannel LIKE '%8-668-00-481%' THEN 'E.OSUNA'
-      WHEN dstchannel LIKE '%8-668-00-482%' THEN 'A.ZAMORA'          
-      WHEN dstchannel LIKE '%8-668-00-483%' THEN 'H.GALAVIZ'  
-      WHEN dstchannel LIKE '%8-668-00-484%' THEN 'B.ROSAS'
-      WHEN dstchannel LIKE '%8-668-00-180%' THEN 'M.GALAVIZ'
-      WHEN dstchannel LIKE '%8-668-00-443%' THEN 'O.BELTRAN'
-      WHEN dstchannel LIKE '%8-668-00-444%' THEN 'A.MARTINEZ'
-      WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JA.CHAVARIN'
-      WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-      WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-      WHEN dstchannel LIKE '%8-668-00-485%' THEN 'J.COTA'
-      WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-      WHEN lastapp = 'Playback' THEN 'IVR'
-   ELSE
+   $UsuariosLlamadas
       'NO_IDENTIFICADO' 
    END 'AGENTE',
    dstchannel, lastapp, lastdata, duration, billsec, disposition,

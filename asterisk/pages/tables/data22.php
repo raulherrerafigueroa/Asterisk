@@ -415,8 +415,7 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-            <!-- <h1>Llamadas por Agente </h1> -->
-          </div>
+         
 
 <?php
         
@@ -583,10 +582,12 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
         $tiempoensegundos = (int)$tiempototalagetes-((int)$tiempoenminutos*60);
         }else {$tiempoenminutos= 0; $tiempoensegundos=0;}
     ?>
-            <h6>Duracion Promedio de Llamada Diaria: 
-            <?php echo (int)$tiempoenminutos;?> Minutos <?php echo $tiempoensegundos?> Segundos  
-            <?php /*echo number_format((float)$tiempoenminutos,2,'.','');*/?>  </h6>
+            
+          <!--   <h1>Promedio de Llamada Diaria: -->
+          <b> Promedio de Llamadas Diario:  <?php echo (int)$tiempoenminutos;?> Minutos <?php echo $tiempoensegundos?> Segundos  </b>
+            <?php /*echo number_format((float)$tiempoenminutos,2,'.','');*/?>  </h1>
           
+        
     </section>
 
     <!-- Main content -->
@@ -608,7 +609,7 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
                   <input type="date" id="fechadataini" name="fechadataini" min="2021-02-01" max="2025-12-31"></input> 
                   <input type="date" id="fechadatafin" name="fechadatafin" ></input>
                   <button type="submit"  id="btnbuscar" onclick="funcionbusquedadata()">Buscar</button>
-                  <h6  align="left"  id="fechadatafin" name="fechadatafin" >Fecha:  <?php echo($fechasqlini1) ?>  al <?php echo($fechasqlfin2) ?> </h6>
+                  <b> <h6   align="left"  id="fechadatafin" name="fechadatafin" >Fecha:  <?php echo($fechasqlini1) ?>  al <?php echo($fechasqlfin2) ?> </h6> </b>
                   
                   
                   <table class="table table-bordered table-striped">
@@ -617,7 +618,6 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
                   <th>Demanda</th>
                     <th>Atendidas</th>
                     <th>Perdidas</th>
-                    <th>Fallo</th>
                     <th>Eficiencia</th>
                   </tr>
                   </thead>
@@ -636,11 +636,10 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
           <?php
 
           
-                        $sqleficiencia="SELECT calldate fecha, sum(dem) Demanda,sum(con) Atendidas,sum(per) Perdidas, SUM(fai) Fallo, concat(ROUND((SUM(con)/SUM(dem)*100),2),'%') Eficiencia FROM (
-                          SELECT calldate, dem,con,per, fai, etiqueta
+                        $sqleficiencia="SELECT calldate fecha, sum(dem) Demanda,sum(con) Contestadas,sum(per) Perdidas, concat(ROUND((SUM(con)/SUM(dem)*100),2),'%') Eficiencia FROM (
+                          SELECT calldate, dem,con,per,etiqueta
                             FROM (
-                            
-                             SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, COUNT(disposition) dem, 0 con, 0 per,0 fai,'DEMANDA' etiqueta
+                             SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, COUNT(disposition) dem, 0 con, 0 per,'DEMANDA' etiqueta
                              
                                FROM (
                               SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
@@ -683,6 +682,32 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
                                  AND disposition = 'FAILED'
                                  AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY'))
                           UNION
+                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
+                                     clid, src, dcontext, dst, channel,
+                                     CASE 
+                                     WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
+                                     WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
+                                     ELSE dstchannel
+                                     END 'dstchannel',
+                                     lastapp, lastdata,
+                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
+                                     (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
+                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                FROM cdr cdr1
+                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
+                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
+                                 AND dst IN ('866800411')
+                                 AND disposition = 'ANSWERED'
+                                 AND (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') >4
+                          ) DATA
+                          
+                          
+                          UNION ALL
+                          
+                          
+                          SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, 0 dem, COUNT(disposition) con, 0 per,'CONTESTADAS' etiqueta
+                             
+                               FROM (
                               SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
                                      clid, src, dcontext, dst, channel,
                                      CASE 
@@ -716,41 +741,14 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
                                  AND lastapp != 'Playback'
                                  AND clid NOT LIKE '%SERVICIOS TI%'
                                  AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY') AND billsec > '0')
+                          
                           ) DATA
                           
                           
                           UNION ALL
-                                             
-   
-                          SELECT calldate, dem, sum(con), per, fai, etiqueta FROM (
-                          SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, 0 dem, COUNT(DISTINCT(uniqueid)) con, 0 per,0 fai,'ATENDIDAS' etiqueta
-                             
-                               FROM (
-                              SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
-                                     clid, src, dcontext, dst, channel,
-                                     CASE 
-                                     WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
-                                     WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
-                                     ELSE dstchannel
-                                     END 'dstchannel',
-                                     lastapp, lastdata,
-                                     (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'duration',
-                                     (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') 'billsec',
-                                     disposition, amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
-                                FROM cdr cdr1
-                               WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
-                                 AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
-                                 AND dst IN ('866800411')
-                                 AND disposition = 'ANSWERED'
-                                 AND (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') >4
-
-                          ) DATA   
-                          group by uniqueid, dstchannel
-                          ) DATA2
                           
-                          UNION ALL
-                                                
-                          SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, 0 dem, 0 con, COUNT(disposition) per,0 fai,'PERDIDAS' etiqueta
+                          
+                          SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate, 0 dem, 0 con, COUNT(disposition) per,'PERDIDAS' etiqueta
                              
                                FROM (
                               SELECT distinct (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
@@ -792,18 +790,13 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
                                  AND dst IN ('866800411')
                                  AND disposition = 'FAILED'
                                  AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY'))
-                          ) DATA
-                          
-                          
-                        UNION ALL                    
-                           SELECT DATE_FORMAT(calldate,'%d-%b-%Y') calldate , 0 dem, 0 con, 0 per, COUNT(disposition) fai,'FALLO' etiqueta
-                            FROM (
+                          UNION
                               SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
                                      clid, src, dcontext, dst, channel, null 'dstchannel',
                                      lastapp, lastdata,
                                      (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'duration',
                                      (SELECT max(billsec) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'billsec',
-                                     'disposition', amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
+                                     'FAILED', amaflags, accountcode, uniqueid, userfield, peeraccount, linkedid, route_rate, recording_filename, recording_status, recording_path
                                 FROM cdr cdr1
                                WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00')
                                  AND dcontext IN ('INTERNAL', 'SERVICIOS-TI')
@@ -813,8 +806,8 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
                                  AND lastapp != 'Playback'
                                  AND clid NOT LIKE '%SERVICIOS TI%'
                                  AND cdr1.uniqueid NOT IN (SELECT DISTINCT uniqueid FROM cdr WHERE CALLDATE BETWEEN CONCAT('$fechasqlini1', ' 00:00:00') AND CONCAT('$fechasqlfin2', ' 23:59:00') AND dcontext IN ('INTERNAL', 'SERVICIOS-TI') AND dst IN ('866800411') AND disposition IN ('ANSWERED','NO ANSWER','BUSY') AND billsec > '0')
-                          ) DATA              
                           
+                          ) DATA
                           )CONSULTA
                            GROUP BY calldate,etiqueta
                            )CONSIULTA2";
@@ -830,7 +823,6 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
  <td> <?php echo $mostrar[2]?></td>
  <td> <?php echo $mostrar[3]?></td>
  <td> <?php echo $mostrar[4]?></td>
- <td> <?php echo $mostrar[5]?></td>
  
                 <?php } ?>    
                   </tr>
@@ -875,6 +867,7 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
                          SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate',
                                 clid, src, dcontext, dst, channel,
                                 CASE 
+                                WHEN dstchannel LIKE '%ASTERISK%' THEN 'Celular'
                                 WHEN dstchannel LIKE '%EC500%' THEN 'Celular'
                                 ELSE dstchannel
                                 END 'dstchannel',
@@ -896,7 +889,6 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
                             AND dst IN ('866800411')
                             AND disposition = 'ANSWERED'
                             AND (SELECT max(duration) FROM cdr WHERE uniqueid = cdr1.uniqueid) - (SELECT ifnull(max(billsec),0) FROM cdr WHERE uniqueid = cdr1.uniqueid AND disposition = 'NO ANSWER') >4
-                       GROUP BY UNIQUEID 
                      ) DATA
                      GROUP BY AGENTE
                      ORDER BY ULTIMA_LLAMADA DESC
@@ -920,7 +912,8 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
                 <?php } ?>    
                   </tr>
                   <tr>
-                    
+                  <td> <b>Total:</b></td>
+                  <td > <b> <?php echo $SUMA?> </b></td>
                   </tr>
                   </tbody>
 
@@ -1001,7 +994,7 @@ while ($mostrar =mysqli_fetch_array($resul)){ ?>
     <strong></a></strong>
     By: Raul Herrera / Abner Zamora
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 1.4.1
+      <b>Version</b> 1.1.0
     </div>
   </footer>
 </div>

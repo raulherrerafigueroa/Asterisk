@@ -10,6 +10,71 @@ $conitop = conectaritop();
 
 date_default_timezone_set('America/Mazatlan');
 
+$UsuariosItop = " CASE
+WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
+      WHEN agent_id = '1600' THEN 'ISAMAR MONTOYA'
+      WHEN agent_id = '5324' THEN 'HORACIO GALAVIZ'
+      WHEN agent_id = '12' THEN 'JESUS LARA'
+      WHEN agent_id = '825' THEN 'JOSE ANTONIO TORRES'
+      WHEN agent_id = '2954' THEN 'ORSON ECHAVE'
+      WHEN agent_id = '8351' THEN 'JORGE DAVALOS'
+      WHEN agent_id = '4771' THEN 'MIGUEL MORALES'
+      WHEN agent_id = '3102' THEN 'JL.LUNA'
+      WHEN agent_id = '3264' THEN 'CAIN APODACA'
+      WHEN agent_id = '1794' THEN 'GUILLERMO PADILLA'
+      WHEN agent_id = '4503' THEN 'RAUL HERRERA'     
+      WHEN agent_id = '5490' THEN 'EMMANUEL OSUNA'
+      WHEN agent_id = '2952' THEN 'ABNER ZAMORA'          
+      WHEN agent_id = '11' THEN 'OSCAR GALAVIZ'  
+      WHEN agent_id = '6022' THEN 'BLAS ROSAS'
+      WHEN agent_id = '8924' THEN 'NATALIA NIEBLAS'
+      WHEN agent_id = '13426' THEN 'MARCIA GALAVIZ'
+      WHEN agent_id = '13419' THEN 'ANGEL GRIJALVA'
+      WHEN agent_id = '8918' THEN 'OSCAR BELTRAN'
+      WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
+      WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
+      WHEN agent_id = '9713' THEN 'JORGE COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+      WHEN agent_id = '14768' THEN 'YOHARY PITTER'
+      WHEN agent_id = '16398' THEN 'JOSE LUIS VALDEZ'
+      WHEN agent_id = '16397' THEN 'HECTOR GALLARDO'
+      END";
+
+   $UsuariosLlamadas = "CASE
+         WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
+         WHEN dstchannel LIKE '%8-668-00-413%' THEN 'PERLA GRAJEDA'
+         WHEN dstchannel LIKE '%8-668-00-414%' THEN 'ISAMAR MONTOYA'
+         WHEN dstchannel LIKE '%8-668-00-471%' THEN 'OSCAR GALAVIZ'
+         WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JESUS LARA'
+         WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JOSE ANTONIO TORRES'
+         WHEN dstchannel LIKE '%8-668-00-474%' THEN 'ORSON ECHAVE'
+         WHEN dstchannel LIKE '%8-668-00-475%' THEN 'JORGE DAVALOS'
+         WHEN dstchannel LIKE '%8-668-00-476%' THEN 'MIGUEL MORALES'
+         WHEN dstchannel LIKE '%8-668-00-180%' THEN 'MARCIA GALAVIZ'
+         WHEN dstchannel LIKE '%8-668-00-478%' THEN 'CAIN APODACA'
+         WHEN dstchannel LIKE '%8-668-00-479%' THEN 'GUILLERMO PADILLA'
+         WHEN dstchannel LIKE '%8-668-00-480%' THEN 'RAUL HERRERA'     
+         WHEN dstchannel LIKE '%8-668-00-481%' THEN 'EMMANUEL OSUNA'
+         WHEN dstchannel LIKE '%8-668-00-482%' THEN 'ABNER ZAMORA'          
+         WHEN dstchannel LIKE '%8-668-00-483%' THEN 'HORACIO GALAVIZ'  
+         WHEN dstchannel LIKE '%8-668-00-484%' THEN 'BLAS ROSAS' 
+         WHEN dstchannel LIKE '%8-668-00-485%' THEN 'JORGE COTA'
+         WHEN dstchannel LIKE '%8-668-00-442%' THEN 'ANGEL GRIJALVA'
+         WHEN dstchannel LIKE '%8-668-00-443%' THEN 'OSCAR BELTRAN'
+         WHEN dstchannel LIKE '%8-668-00-444%' THEN 'ALBERTO MARTINEZ'
+         WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JOSE ANTONIO CHAVARIN'
+         WHEN dstchannel LIKE '%8-668-00-389%' THEN 'YOHARY PITTER'
+         WHEN dstchannel LIKE '%8-668-00-148%' THEN 'JOSE LUIS VALDEZ'
+         WHEN dstchannel LIKE '%8-668-00-387%' THEN 'ARMANDO BORBOA'
+         WHEN dstchannel LIKE '%8-668-00-385%' THEN 'HECTOR GALLARDO'
+         WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
+         WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
+         WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
+         WHEN lastapp = 'Playback' THEN 'IVR'
+         WHEN dstchannel LIKE '%Celular%' THEN 'GUARDIA'
+         ELSE";
+     
+
 ?>
 
 <!DOCTYPE html>
@@ -466,34 +531,7 @@ date_default_timezone_set('America/Mazatlan');
     $fefi ='2021-08-23 23:00:00';*/
 
 $sql="SELECT
-CASE
-      WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-      WHEN dstchannel LIKE '%8-668-00-413%' THEN 'P.GRAJEDA'
-      WHEN dstchannel LIKE '%8-668-00-414%' THEN 'I.MONTOYA'
-      WHEN dstchannel LIKE '%8-668-00-471%' THEN 'O.GALAVIZ'
-      WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JL.LARA'
-      WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JA.TORRES'
-      WHEN dstchannel LIKE '%8-668-00-474%' THEN 'O.ECHAVE'
-      WHEN dstchannel LIKE '%8-668-00-475%' THEN 'J.DAVALOS'
-      WHEN dstchannel LIKE '%8-668-00-476%' THEN 'M.MORALES'
-      WHEN dstchannel LIKE '%8-668-00-442%' THEN 'A.GRIJALVA'
-      WHEN dstchannel LIKE '%8-668-00-478%' THEN 'C.APODACA'
-      WHEN dstchannel LIKE '%8-668-00-479%' THEN 'G.PADILLA'
-      WHEN dstchannel LIKE '%8-668-00-480%' THEN 'R.HERRERA'     
-      WHEN dstchannel LIKE '%8-668-00-481%' THEN 'E.OSUNA'
-      WHEN dstchannel LIKE '%8-668-00-482%' THEN 'A.ZAMORA'          
-      WHEN dstchannel LIKE '%8-668-00-483%' THEN 'H.GALAVIZ'  
-      WHEN dstchannel LIKE '%8-668-00-484%' THEN 'B.ROSAS'
-      WHEN dstchannel LIKE '%8-668-00-180%' THEN 'M.GALAVIZ'
-      WHEN dstchannel LIKE '%8-668-00-443%' THEN 'O.BELTRAN'
-      WHEN dstchannel LIKE '%8-668-00-444%' THEN 'A.MARTINEZ'
-      WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JA.CHAVARIN'
-      WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-      WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-      WHEN dstchannel LIKE '%8-668-00-485%' THEN 'J.COTA'
-      WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-      WHEN lastapp = 'Playback' THEN 'IVR'
-ELSE
+$UsuariosLlamadas
    'NO_IDENTIFICADO' 
 END 'AGENTE',
 count(distinct(uniqueid)) LLAMADAS
@@ -521,30 +559,7 @@ ORDER BY LLAMADAS DESC";
 
 
 $sqlitop="SELECT 
-CASE
-WHEN  agent_id = '2' THEN 'P.GRAJEDA'
-      WHEN agent_id = '1600' THEN 'I.MONTOYA'
-      WHEN agent_id = '5324' THEN 'H.GALAVIZ'
-      WHEN agent_id = '12' THEN 'JL.LARA'
-      WHEN agent_id = '825' THEN 'JA.TORRES'
-      WHEN agent_id = '2954' THEN 'O.ECHAVE'
-      WHEN agent_id = '8351' THEN 'J.DAVALOS'
-      WHEN agent_id = '4771' THEN 'M.MORALES'
-      WHEN agent_id = '3102' THEN 'JL.LUNA'
-      WHEN agent_id = '3264' THEN 'C.APODACA'
-      WHEN agent_id = '1794' THEN 'G.PADILLA'
-      WHEN agent_id = '4503' THEN 'R.HERRERA'     
-      WHEN agent_id = '5490' THEN 'E.OSUNA'
-      WHEN agent_id = '2952' THEN 'A.ZAMORA'          
-      WHEN agent_id = '11' THEN 'O.GALAVIZ'  
-      WHEN agent_id = '6022' THEN 'B.ROSAS'
-      WHEN agent_id = '8924' THEN 'N.NIEBLAS'
-      WHEN agent_id = '13426' THEN 'M.GALAVIZ'
-      WHEN agent_id = '13419' THEN 'A.GRIJALVA'
-      WHEN agent_id = '8918' THEN 'O.BELTRAN'
-      WHEN agent_id = '8763' THEN 'A.MARTINEZ'
-      WHEN agent_id = '8897' THEN 'JA.CHAVARIN'
-      END agent_id, count(agent_id) NumItop FROM ticket
+$UsuariosItop agent_id, count(agent_id) NumItop FROM ticket
   WHERE
   
   start_date BETWEEN CONCAT('2021-08-24', ' 00:00:00') AND CONCAT('2021-08-24', ' 23:59:00')

@@ -6,6 +6,40 @@ $con = conectar();
 
 date_default_timezone_set('America/Mazatlan');
 
+$UsuariosLlamadas = "CASE
+         WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
+         WHEN dstchannel LIKE '%8-668-00-413%' THEN 'PERLA GRAJEDA'
+         WHEN dstchannel LIKE '%8-668-00-414%' THEN 'ISAMAR MONTOYA'
+         WHEN dstchannel LIKE '%8-668-00-471%' THEN 'OSCAR GALAVIZ'
+         WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JESUS LARA'
+         WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JOSE ANTONIO TORRES'
+         WHEN dstchannel LIKE '%8-668-00-474%' THEN 'ORSON ECHAVE'
+         WHEN dstchannel LIKE '%8-668-00-475%' THEN 'JORGE DAVALOS'
+         WHEN dstchannel LIKE '%8-668-00-476%' THEN 'MIGUEL MORALES'
+         WHEN dstchannel LIKE '%8-668-00-180%' THEN 'MARCIA GALAVIZ'
+         WHEN dstchannel LIKE '%8-668-00-478%' THEN 'CAIN APODACA'
+         WHEN dstchannel LIKE '%8-668-00-479%' THEN 'GUILLERMO PADILLA'
+         WHEN dstchannel LIKE '%8-668-00-480%' THEN 'RAUL HERRERA'     
+         WHEN dstchannel LIKE '%8-668-00-481%' THEN 'EMMANUEL OSUNA'
+         WHEN dstchannel LIKE '%8-668-00-482%' THEN 'ABNER ZAMORA'          
+         WHEN dstchannel LIKE '%8-668-00-483%' THEN 'HORACIO GALAVIZ'  
+         WHEN dstchannel LIKE '%8-668-00-484%' THEN 'BLAS ROSAS' 
+         WHEN dstchannel LIKE '%8-668-00-485%' THEN 'JORGE COTA'
+         WHEN dstchannel LIKE '%8-668-00-442%' THEN 'ANGEL GRIJALVA'
+         WHEN dstchannel LIKE '%8-668-00-443%' THEN 'OSCAR BELTRAN'
+         WHEN dstchannel LIKE '%8-668-00-444%' THEN 'ALBERTO MARTINEZ'
+         WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JOSE ANTONIO CHAVARIN'
+         WHEN dstchannel LIKE '%8-668-00-389%' THEN 'YOHARY PITTER'
+         WHEN dstchannel LIKE '%8-668-00-148%' THEN 'JOSE LUIS VALDEZ'
+         WHEN dstchannel LIKE '%8-668-00-387%' THEN 'ARMANDO BORBOA'
+         WHEN dstchannel LIKE '%8-668-00-385%' THEN 'HECTOR GALLARDO'
+         WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
+         WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
+         WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
+         WHEN lastapp = 'Playback' THEN 'IVR'
+         WHEN dstchannel LIKE '%Celular%' THEN 'GUARDIA'
+         ELSE";
+
 ?>
 
 <!DOCTYPE html>
@@ -403,35 +437,7 @@ date_default_timezone_set('America/Mazatlan');
 
 
                   <?php $sql="SELECT
-                  CASE
-                           WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-                           WHEN dstchannel LIKE '%8-668-00-413%' THEN 'PERLA GRAJEDA'
-                           WHEN dstchannel LIKE '%8-668-00-414%' THEN 'ISAMAR MONTOYA'
-                           WHEN dstchannel LIKE '%8-668-00-471%' THEN 'OSCAR GALAVIZ'
-                           WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JESUS LARA'
-                           WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JOSE ANTONIO TORRES'
-                           WHEN dstchannel LIKE '%8-668-00-474%' THEN 'ORSON ECHAVE'
-                           WHEN dstchannel LIKE '%8-668-00-475%' THEN 'JORGE DAVALOS'
-                           WHEN dstchannel LIKE '%8-668-00-476%' THEN 'MIGUEL MORALES'
-                           WHEN dstchannel LIKE '%8-668-00-180%' THEN 'MARCIA GALAVIZ'
-                           WHEN dstchannel LIKE '%8-668-00-478%' THEN 'CAIN APODACA'
-                           WHEN dstchannel LIKE '%8-668-00-479%' THEN 'GUILLERMO PADILLA'
-                           WHEN dstchannel LIKE '%8-668-00-480%' THEN 'RAUL HERRERA'     
-                           WHEN dstchannel LIKE '%8-668-00-481%' THEN 'EMMANUEL OSUNA'
-                           WHEN dstchannel LIKE '%8-668-00-482%' THEN 'ABNER ZAMORA'          
-                           WHEN dstchannel LIKE '%8-668-00-483%' THEN 'HORACIO GALAVIZ'  
-                           WHEN dstchannel LIKE '%8-668-00-484%' THEN 'BLAS ROSAS' 
-                           WHEN dstchannel LIKE '%8-668-00-485%' THEN 'JORGE COTA'
-                           WHEN dstchannel LIKE '%8-668-00-442%' THEN 'ANGEL GRIJALVA'
-                           WHEN dstchannel LIKE '%8-668-00-443%' THEN 'OSCAR BELTRAN'
-                           WHEN dstchannel LIKE '%8-668-00-444%' THEN 'ALBERTO MARTINEZ'
-                           WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JOSE ANTONIO CHAVARIN'
-                           WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-                           WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-                           WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-                           WHEN lastapp = 'Playback' THEN 'IVR'
-                           WHEN dstchannel LIKE '%Celular%' THEN 'GUARDIA'
-                           ELSE
+                  $UsuariosLlamadas
                            'TRANSFERIDA' -- dstchannel 
                         END 'AGENTE',
 HOUR(CALLDATE) HORA,
@@ -495,35 +501,7 @@ SELECT (SELECT max(calldate) FROM cdr WHERE uniqueid = cdr1.uniqueid) 'calldate'
    ) DATA
    WHERE  disposition = 'ANSWERED'
    AND billsec>4
-GROUP BY  CASE
-                           WHEN dstchannel LIKE '%866800411%' THEN 'GUARDIA'
-                           WHEN dstchannel LIKE '%8-668-00-413%' THEN 'PERLA GRAJEDA'
-                           WHEN dstchannel LIKE '%8-668-00-414%' THEN 'ISAMAR MONTOYA'
-                           WHEN dstchannel LIKE '%8-668-00-471%' THEN 'OSCAR GALAVIZ'
-                           WHEN dstchannel LIKE '%8-668-00-472%' THEN 'JESUS LARA'
-                           WHEN dstchannel LIKE '%8-668-00-473%' THEN 'JOSE ANTONIO TORRES'
-                           WHEN dstchannel LIKE '%8-668-00-474%' THEN 'ORSON ECHAVE'
-                           WHEN dstchannel LIKE '%8-668-00-475%' THEN 'JORGE DAVALOS'
-                           WHEN dstchannel LIKE '%8-668-00-476%' THEN 'MIGUEL MORALES'
-                           WHEN dstchannel LIKE '%8-668-00-180%' THEN 'MARCIA GALAVIZ'
-                           WHEN dstchannel LIKE '%8-668-00-478%' THEN 'CAIN APODACA'
-                           WHEN dstchannel LIKE '%8-668-00-479%' THEN 'GUILLERMO PADILLA'
-                           WHEN dstchannel LIKE '%8-668-00-480%' THEN 'RAUL HERRERA'     
-                           WHEN dstchannel LIKE '%8-668-00-481%' THEN 'EMMANUEL OSUNA'
-                           WHEN dstchannel LIKE '%8-668-00-482%' THEN 'ABNER ZAMORA'          
-                           WHEN dstchannel LIKE '%8-668-00-483%' THEN 'HORACIO GALAVIZ'  
-                           WHEN dstchannel LIKE '%8-668-00-484%' THEN 'BLAS ROSAS' 
-                           WHEN dstchannel LIKE '%8-668-00-485%' THEN 'JORGE COTA'
-                           WHEN dstchannel LIKE '%8-668-00-442%' THEN 'ANGEL GRIJALVA'
-                           WHEN dstchannel LIKE '%8-668-00-443%' THEN 'OSCAR BELTRAN'
-                           WHEN dstchannel LIKE '%8-668-00-444%' THEN 'ALBERTO MARTINEZ'
-                           WHEN dstchannel LIKE '%8-668-00-415%' THEN 'JOSE ANTONIO CHAVARIN'
-                           WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
-                           WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
-                           WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
-                           WHEN lastapp = 'Playback' THEN 'IVR'
-                           WHEN dstchannel LIKE '%Celular%' THEN 'GUARDIA'
-                           ELSE
+GROUP BY  $UsuariosLlamadas
                            'TRANSFERIDA' -- dstchannel 
                         END, HORA
                        ORDER BY HORA DESC, No_Llamadas DESC"; 

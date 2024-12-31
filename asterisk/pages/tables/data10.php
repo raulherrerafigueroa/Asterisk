@@ -10,6 +10,36 @@ $conitop = conectaritop();
 
 date_default_timezone_set('America/Mazatlan');
 
+$UsuariosItop = " CASE
+WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
+      WHEN agent_id = '1600' THEN 'ISAMAR MONTOYA'
+      WHEN agent_id = '5324' THEN 'HORACIO GALAVIZ'
+      WHEN agent_id = '12' THEN 'JESUS LARA'
+      WHEN agent_id = '825' THEN 'JOSE ANTONIO TORRES'
+      WHEN agent_id = '2954' THEN 'ORSON ECHAVE'
+      WHEN agent_id = '8351' THEN 'JORGE DAVALOS'
+      WHEN agent_id = '4771' THEN 'MIGUEL MORALES'
+      WHEN agent_id = '3102' THEN 'JL.LUNA'
+      WHEN agent_id = '3264' THEN 'CAIN APODACA'
+      WHEN agent_id = '1794' THEN 'GUILLERMO PADILLA'
+      WHEN agent_id = '4503' THEN 'RAUL HERRERA'     
+      WHEN agent_id = '5490' THEN 'EMMANUEL OSUNA'
+      WHEN agent_id = '2952' THEN 'ABNER ZAMORA'          
+      WHEN agent_id = '11' THEN 'OSCAR GALAVIZ'  
+      WHEN agent_id = '6022' THEN 'BLAS ROSAS'
+      WHEN agent_id = '8924' THEN 'NATALIA NIEBLAS'
+      WHEN agent_id = '13426' THEN 'MARCIA GALAVIZ'
+      WHEN agent_id = '13419' THEN 'ANGEL GRIJALVA'
+      WHEN agent_id = '8918' THEN 'OSCAR BELTRAN'
+      WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
+      WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
+      WHEN agent_id = '9713' THEN 'JORGE COTA'
+      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
+      WHEN agent_id = '14768' THEN 'YOHARY PITTER'
+      WHEN agent_id = '16398' THEN 'JOSE LUIS VALDEZ'
+      WHEN agent_id = '16397' THEN 'HECTOR GALLARDO'
+      END";
+
 ?>
 
 <!DOCTYPE html>
@@ -405,33 +435,7 @@ date_default_timezone_set('America/Mazatlan');
       $sqlitop3="SELECT Agente, SUM(num_req) Correo_Requerimiento, SUM(num_inc) Correo_Incidente
       from (
      SELECT
-     CASE
-WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
-      WHEN agent_id = '1600' THEN 'ISAMAR MONTOYA'
-      WHEN agent_id = '5324' THEN 'HORACIO GALAVIZ'
-      WHEN agent_id = '12' THEN 'JESUS LARA'
-      WHEN agent_id = '825' THEN 'JOSE ANTONIO TORRES'
-      WHEN agent_id = '2954' THEN 'ORSON ECHAVE'
-      WHEN agent_id = '8351' THEN 'JORGE DAVALOS'
-      WHEN agent_id = '4771' THEN 'MIGUEL MORALES'
-      WHEN agent_id = '3102' THEN 'JL.LUNA'
-      WHEN agent_id = '3264' THEN 'CAIN APODACA'
-      WHEN agent_id = '1794' THEN 'GUILLERMO PADILLA'
-      WHEN agent_id = '4503' THEN 'RAUL HERRERA'     
-      WHEN agent_id = '5490' THEN 'EMMANUEL OSUNA'
-      WHEN agent_id = '2952' THEN 'ABNER ZAMORA'          
-      WHEN agent_id = '11' THEN 'OSCAR GALAVIZ'  
-      WHEN agent_id = '6022' THEN 'BLAS ROSAS'
-      WHEN agent_id = '8924' THEN 'NATALIA NIEBLAS'
-      WHEN agent_id = '13426' THEN 'MARCIA GALAVIZ'
-      WHEN agent_id = '13419' THEN 'ANGEL GRIJALVA'
-      WHEN agent_id = '8918' THEN 'OSCAR BELTRAN'
-      WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
-      WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
-      WHEN agent_id = '9713' THEN 'JORGE COTA'
-      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
-	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
-      END Agente, 
+     $UsuariosItop Agente, 
          count(agent_id) num_inc,
          0 num_req,
      case finalclass
@@ -445,64 +449,12 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
      AND finalclass IN ('Incident','UserRequest')
      AND team_id IN ('4')
      group BY  
-     CASE
-WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
-      WHEN agent_id = '1600' THEN 'ISAMAR MONTOYA'
-      WHEN agent_id = '5324' THEN 'HORACIO GALAVIZ'
-      WHEN agent_id = '12' THEN 'JESUS LARA'
-      WHEN agent_id = '825' THEN 'JOSE ANTONIO TORRES'
-      WHEN agent_id = '2954' THEN 'ORSON ECHAVE'
-      WHEN agent_id = '8351' THEN 'JORGE DAVALOS'
-      WHEN agent_id = '4771' THEN 'MIGUEL MORALES'
-      WHEN agent_id = '3102' THEN 'JL.LUNA'
-      WHEN agent_id = '3264' THEN 'CAIN APODACA'
-      WHEN agent_id = '1794' THEN 'GUILLERMO PADILLA'
-      WHEN agent_id = '4503' THEN 'RAUL HERRERA'     
-      WHEN agent_id = '5490' THEN 'EMMANUEL OSUNA'
-      WHEN agent_id = '2952' THEN 'ABNER ZAMORA'          
-      WHEN agent_id = '11' THEN 'OSCAR GALAVIZ'  
-      WHEN agent_id = '6022' THEN 'BLAS ROSAS'
-      WHEN agent_id = '8924' THEN 'NATALIA NIEBLAS'
-      WHEN agent_id = '13426' THEN 'MARCIA GALAVIZ'
-      WHEN agent_id = '13419' THEN 'ANGEL GRIJALVA'
-      WHEN agent_id = '8918' THEN 'OSCAR BELTRAN'
-      WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
-      WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
-      WHEN agent_id = '9713' THEN 'JORGE COTA'
-      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
-	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
-      END
+     $UsuariosItop
                  
      UNION ALL
      
      SELECT
-     CASE
-WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
-      WHEN agent_id = '1600' THEN 'ISAMAR MONTOYA'
-      WHEN agent_id = '5324' THEN 'HORACIO GALAVIZ'
-      WHEN agent_id = '12' THEN 'JESUS LARA'
-      WHEN agent_id = '825' THEN 'JOSE ANTONIO TORRES'
-      WHEN agent_id = '2954' THEN 'ORSON ECHAVE'
-      WHEN agent_id = '8351' THEN 'JORGE DAVALOS'
-      WHEN agent_id = '4771' THEN 'MIGUEL MORALES'
-      WHEN agent_id = '3102' THEN 'JL.LUNA'
-      WHEN agent_id = '3264' THEN 'CAIN APODACA'
-      WHEN agent_id = '1794' THEN 'GUILLERMO PADILLA'
-      WHEN agent_id = '4503' THEN 'RAUL HERRERA'     
-      WHEN agent_id = '5490' THEN 'EMMANUEL OSUNA'
-      WHEN agent_id = '2952' THEN 'ABNER ZAMORA'          
-      WHEN agent_id = '11' THEN 'OSCAR GALAVIZ'  
-      WHEN agent_id = '6022' THEN 'BLAS ROSAS'
-      WHEN agent_id = '8924' THEN 'NATALIA NIEBLAS'
-      WHEN agent_id = '13426' THEN 'MARCIA GALAVIZ'
-      WHEN agent_id = '13419' THEN 'ANGEL GRIJALVA'
-      WHEN agent_id = '8918' THEN 'OSCAR BELTRAN'
-      WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
-      WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
-      WHEN agent_id = '9713' THEN 'JORGE COTA'
-      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
-	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
-      END Agente, 
+     $UsuariosItop Agente, 
            0 Num_Correos,
          count(agent_id) num_req,
      case finalclass
@@ -516,33 +468,7 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
      AND finalclass IN ('Incident','UserRequest')
      AND team_id IN ('4')
      group BY  
-     CASE
-WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
-      WHEN agent_id = '1600' THEN 'ISAMAR MONTOYA'
-      WHEN agent_id = '5324' THEN 'HORACIO GALAVIZ'
-      WHEN agent_id = '12' THEN 'JESUS LARA'
-      WHEN agent_id = '825' THEN 'JOSE ANTONIO TORRES'
-      WHEN agent_id = '2954' THEN 'ORSON ECHAVE'
-      WHEN agent_id = '8351' THEN 'JORGE DAVALOS'
-      WHEN agent_id = '4771' THEN 'MIGUEL MORALES'
-      WHEN agent_id = '3102' THEN 'JL.LUNA'
-      WHEN agent_id = '3264' THEN 'CAIN APODACA'
-      WHEN agent_id = '1794' THEN 'GUILLERMO PADILLA'
-      WHEN agent_id = '4503' THEN 'RAUL HERRERA'     
-      WHEN agent_id = '5490' THEN 'EMMANUEL OSUNA'
-      WHEN agent_id = '2952' THEN 'ABNER ZAMORA'          
-      WHEN agent_id = '11' THEN 'OSCAR GALAVIZ'  
-      WHEN agent_id = '6022' THEN 'BLAS ROSAS'
-      WHEN agent_id = '8924' THEN 'NATALIA NIEBLAS'
-      WHEN agent_id = '13426' THEN 'MARCIA GALAVIZ'
-      WHEN agent_id = '13419' THEN 'ANGEL GRIJALVA'
-      WHEN agent_id = '8918' THEN 'OSCAR BELTRAN'
-      WHEN agent_id = '8763' THEN 'ALBERTO MARTINEZ'
-      WHEN agent_id = '8897' THEN 'JOSE ANTONIO CHAVARIN'
-      WHEN agent_id = '9713' THEN 'JORGE COTA'
-      WHEN agent_id = '14769' THEN 'ARMANDO BORBOA'
-	  	WHEN agent_id = '14768' THEN 'YOHARY PITTER'
-      END 
+     $UsuariosItop
      ) as correos
      GROUP BY Agente
      ORDER BY num_inc, num_req  DESC";
