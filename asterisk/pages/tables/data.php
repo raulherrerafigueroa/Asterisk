@@ -36,6 +36,10 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
       WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       WHEN agent_id = '16398' THEN 'JOSE LUIS VALDEZ'
       WHEN agent_id = '16397' THEN 'HECTOR GALLARDO'
+      WHEN agent_id = '18467' THEN 'ALEJANDRO MOLINA'
+      WHEN agent_id = '18468' THEN 'JOSE MANZANAREZ'
+      WHEN agent_id = '18469' THEN 'ANDRES URIAS'
+      WHEN agent_id = '19070' THEN 'BRYAN GARCIA'
       END";
 
    $UsuariosLlamadas = "CASE
@@ -55,7 +59,7 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
          WHEN dstchannel LIKE '%8-668-00-481%' THEN 'EMMANUEL OSUNA'
          WHEN dstchannel LIKE '%8-668-00-482%' THEN 'ABNER ZAMORA'          
          WHEN dstchannel LIKE '%8-668-00-483%' THEN 'HORACIO GALAVIZ'  
-         WHEN dstchannel LIKE '%8-668-00-484%' THEN 'BLAS ROSAS' 
+         WHEN dstchannel LIKE '%8-668-00-484%' THEN 'ISAAC VARELA' 
          WHEN dstchannel LIKE '%8-668-00-485%' THEN 'JORGE COTA'
          WHEN dstchannel LIKE '%8-668-00-442%' THEN 'ANGEL GRIJALVA'
          WHEN dstchannel LIKE '%8-668-00-443%' THEN 'OSCAR BELTRAN'
@@ -65,6 +69,9 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
          WHEN dstchannel LIKE '%8-668-00-148%' THEN 'JOSE LUIS VALDEZ'
          WHEN dstchannel LIKE '%8-668-00-387%' THEN 'ARMANDO BORBOA'
          WHEN dstchannel LIKE '%8-668-00-385%' THEN 'HECTOR GALLARDO'
+         WHEN dstchannel LIKE '%8-668-00-637%' THEN 'ALEJANDRO MOLINA' 
+         WHEN dstchannel LIKE '%8-668-00-626%' THEN 'JOSE VERDUGO'
+         WHEN dstchannel LIKE '%8-668-00-627%' THEN 'ANDRES URIAS'
          WHEN dstchannel LIKE '%IAX2/ASTERISK%' THEN 'SALIENTES'
          WHEN dstchannel LIKE '%SERVICIOS-TI%' THEN 'Servicios TI'
          WHEN dstchannel LIKE '%SIP/8-668-00-421%' THEN 'Servicios TI'
@@ -605,7 +612,7 @@ while ($mostrar =mysqli_fetch_array($resultadoduracion)){
               <!-- /.card-header -->
               <div class="card-body">
                 <form align="right" action ="" method="margin-top">
-                  <input type="date" id="fechadataini" name="fechadataini" min="2021-02-01" max="2025-12-31"></input> 
+                  <input type="date" id="fechadataini" name="fechadataini" min="2021-02-01" max="2099-12-31"></input> 
                   <input type="date" id="fechadatafin" name="fechadatafin" ></input>
                   <button type="submit"  id="btnbuscar" onclick="funcionbusquedadata()">Buscar</button>
                   <h6  align="left"  id="fechadatafin" name="fechadatafin" >Fecha:  <?php echo($fechasqlini1) ?>  al <?php echo($fechasqlfin2) ?> </h6>

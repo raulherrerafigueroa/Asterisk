@@ -38,6 +38,10 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
       WHEN agent_id = '14768' THEN 'YOHARY PITTER'
       WHEN agent_id = '16398' THEN 'JOSE LUIS VALDEZ'
       WHEN agent_id = '16397' THEN 'HECTOR GALLARDO'
+      WHEN agent_id = '18467' THEN 'ALEJANDRO MOLINA'
+      WHEN agent_id = '18468' THEN 'JOSE MANZANAREZ'
+      WHEN agent_id = '18469' THEN 'ANDRES URIAS'
+      WHEN agent_id = '19070' THEN 'BRYAN GARCIA'
       END";
      
 ?>
@@ -403,7 +407,7 @@ WHEN  agent_id = '2' THEN 'PERLA GRAJEDA'
               <!-- /.card-header -->
               <div class="card-body">
                 <form align="right" action ="" method="margin-top">
-                  <input type="date" id="fechadata2ini" name="fechadata2ini" min="2015-11-21" max="2025-12-31"></input> 
+                  <input type="date" id="fechadata2ini" name="fechadata2ini" min="2015-11-21" max="2099-12-31"></input> 
                   <input type="date" id="fechadata2fin" name="fechadata2fin" ></input>
                   <button type="submit"  id="btnbuscar" onclick="funcionbusquedadata2()">Buscar</button>
                   <h3  align="left"  >Fecha:  <?php echo($fechasqlini1) ?>  al <?php echo($fechasqlfin2) ?> </h3>
